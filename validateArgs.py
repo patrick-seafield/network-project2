@@ -24,7 +24,7 @@ def validate(args):
         opts['serverPort'] = int(args[2])
     except ValueError:
         printUsage()
-        print("\nServer Port must be an integer.")
+        print("\n\nServer Port must be an integer.")
         return None
 
     if opts['command'] == "-l":

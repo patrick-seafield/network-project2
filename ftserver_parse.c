@@ -18,6 +18,8 @@
 // the wishes of our client.
 struct command * parse_request_text(char * buffer)
 {
+  printf("Beginning parsing of client request.\n");
+
   struct command * cmd = malloc(sizeof(cmd));
   cmd->ctype = unknown;
   cmd->port = NULL;
@@ -27,16 +29,21 @@ struct command * parse_request_text(char * buffer)
   char * command_name = strtok(buffer, " ");
   if (strcmp("-l", command_name) == 0)
   {
+    // We're just listing a directory.
     cmd->ctype = list_dir;
-    
   }
   else if (strcmp("-g", command_name) == 0)
   {
+    // We're sending a file. Get the filename from the text as well.
     cmd->ctype = send_data;
 
     char * file_name = strtok(NULL, " ");
-    cmd->requested_file = malloc(strlen(file_name));
+    cmd->requested_file = strdup(file_name);
   }
+
+  // Get the port the client has requested the data be sent over.
+  char * port_string = strtok(NULL, " ");
+  cmd->port = strdup(port_string);
 
   return cmd;
 }

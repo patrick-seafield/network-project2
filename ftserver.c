@@ -27,7 +27,8 @@ int main(int argc, char **argv)
 
   // Bind to the user-specified port on this server.
   int sockfd = ftserver_bind(argv[1]);
-
+  printf("Server open on %s\n", argv[1]);
+  
   // Listen for incoming connections on our socket.
   if (listen(sockfd, CONNECTION_COUNT) == -1)
   {
@@ -78,19 +79,28 @@ int main(int argc, char **argv)
 
       // Receive a command from the client.
       char * buffer = malloc(BUFFER_SIZE * sizeof(char));
-      memset(buffer, 0, BUFFER_SIZE);
+      memset(buffer, '\0', BUFFER_SIZE);
       int bytes_recv;
 
-      if ((bytes_recv = recv(acceptfd, &buffer, BUFFER_SIZE - 1, 0)) == -1)
+      printf("calling recv\n");
+      if ((bytes_recv = recv(acceptfd, buffer, BUFFER_SIZE - 1, 0)) == -1)
       {
         perror("recv() failed");
         exit(1);
+      } else {
+        // TESTING: Print what's received.
+        printf("RECEIVED REQUEST %d bytes long: %s\n", bytes_recv, buffer);
       }
 
       struct command * cmd = parse_request_text(buffer);
 
+      printf("Command is: %d\n", (int)cmd->ctype);
+
       if (cmd->ctype == list_dir)
       {
+        printf("List directory requested on port %s.\n", cmd->port);
+        printf("Sending directory contents to %s:%s.\n", s, cmd->port);
+
         // List the directory files for downloading.
         if (list_directory(acceptfd, cmd) == -1)
         {
@@ -109,9 +119,13 @@ int main(int argc, char **argv)
       }
       else
       {
-        
+        // Respond that we don't know what the heck you are asking for!
+        if (respond_unsure(acceptfd) == -1)
+        {
+          perror("respond_unsure() failed");
+          exit(1);
+        }
       }
-
 
       // Close remaining file descriptor, free, and exit.
       free(buffer);

@@ -11,6 +11,7 @@
 #include <sys/wait.h>
 #include <signal.h>
 
+#include "constants.h"
 
 int ftserver_bind(char * port)
 {
@@ -40,6 +41,11 @@ int ftserver_bind(char * port)
 		}
 
 		if (setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &y, sizeof(int)) == -1)
+    {
+			perror("setsockopt() failed");
+			exit(1);
+		}
+    if (setsockopt(sockfd, SOL_SOCKET, SO_SNDBUF, &y, BUFFER_SIZE) == -1)
     {
 			perror("setsockopt() failed");
 			exit(1);

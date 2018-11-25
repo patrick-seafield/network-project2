@@ -5,10 +5,11 @@
 
 import socket
 import sys
+import string
+
 from validateArgs import validate
 
-
-BUFFER_SIZE = 2048
+BUFFER_SIZE = 1024
 
 # main()
 if __name__ == '__main__':
@@ -19,13 +20,17 @@ if __name__ == '__main__':
 
     # Open the socket on the user-specified server.
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        s.connect((opts['serverHost'], opts['serverPort']))
+        s.setsockopt(socket.SOL_SOCKET, socket.SO_SNDBUF, BUFFER_SIZE)
 
         # Ask for a list of downloadable files.
         if opts['command'] == '-l':
-            print('Receiving directory structure from {serverHost}:{serverPort}'.format(**opts))
-            s.connect((opts['serverHost'], opts['serverPort']))
-            # s.sendall(b'-l')
-
-            data = s.recv(BUFFER_SIZE)
+            command = "-l {dataPort}".format(**opts).encode('ascii')
+            print("Sending command:", command)
+            bytes_sent = s.send(command)
+            print("Sent %d bytes." % bytes_sent)
+            
+            data = s.recv(BUFFER_SIZE - 1).decode()
             if data is not None:
+                print('Receiving directory structure from {serverHost}:{serverPort}'.format(**opts))
                 print(repr(data))
