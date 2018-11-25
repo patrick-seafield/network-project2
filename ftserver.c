@@ -94,6 +94,7 @@ int main(int argc, char **argv)
 
       struct command * cmd = parse_request_text(buffer);
 
+      // TESTING: print the command enum.
       printf("Command is: %d\n", (int)cmd->ctype);
 
       if (cmd->ctype == list_dir)
