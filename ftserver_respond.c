@@ -12,13 +12,18 @@
 #include <signal.h>
 
 #include "constants.h"
+#include "ftserver_respond.h"
 
-int list_directory(int acceptfd)
+int list_directory(int acceptfd, struct command * cmd)
 {
-  return send(acceptfd, "Hello, folks!", 13, 0);
+  int bytes_send;
+  bytes_send = send(acceptfd, "Hello, folks!", 13, 0);
+
+  return bytes_send;
 }
 
 int send_file(int acceptfd)
 {
   return 0;
 }
+

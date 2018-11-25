@@ -3,6 +3,14 @@ CS 372, 400, Fall 2018
 
 Project 2: ftserver and ftclient
 
+# EXTRA CREDIT
+  - [X] Multithreaded server
+  - [ ] Transfer files other than text files
+  - [ ] Allow client to change directory (?? specify for listing)
+  - [ ] Username/Password authentication
+    - [ ] Require username/password
+    - [ ] Allow anonymous users
+
 
 # ftserver
 
@@ -20,3 +28,5 @@ EXTRA CREDIT:
 
 
 # ftclient
+
+

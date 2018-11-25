@@ -13,6 +13,7 @@
 
 #include "constants.h"
 #include "ftserver_bind.h"
+#include "ftserver_parse.h"
 #include "ftserver_respond.h"
 
 int main(int argc, char **argv)
@@ -68,13 +69,53 @@ int main(int argc, char **argv)
       // Child process.
       close(sockfd);
 
-      // Say hello.
-      if (list_directory(acceptfd) == -1)
+      // Announce our new connection.
+      char s[INET_ADDRSTRLEN];
+      inet_ntop(client_addr.ss_family,
+                &((struct sockaddr_in *)&client_addr)->sin_addr,
+                s, sizeof s);
+      printf("Connection from %s.\n", s);
+
+      // Receive a command from the client.
+      char * buffer = malloc(BUFFER_SIZE * sizeof(char));
+      memset(buffer, 0, BUFFER_SIZE);
+      int bytes_recv;
+
+      if ((bytes_recv = recv(acceptfd, &buffer, BUFFER_SIZE - 1, 0)) == -1)
       {
-        perror("send() failed");
+        perror("recv() failed");
+        exit(1);
       }
 
-      // Close remaining file descriptor and exit.
+      struct command * cmd = parse_request_text(buffer);
+
+      if (cmd->ctype == list_dir)
+      {
+        // List the directory files for downloading.
+        if (list_directory(acceptfd, cmd) == -1)
+        {
+          perror("list_directory() failed");
+          exit(1);
+        }
+      }
+      else if (cmd->ctype == send_data)
+      {
+        // Send the requested file to the client on the specified 
+        if (send_file(acceptfd) == -1)
+        {
+          perror("send_file() failed");
+          exit(1);
+        }
+      }
+      else
+      {
+        
+      }
+
+
+      // Close remaining file descriptor, free, and exit.
+      free(buffer);
+      free_command(cmd);
       close(acceptfd);
       exit(0);
     }
