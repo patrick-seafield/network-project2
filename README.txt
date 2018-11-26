@@ -4,12 +4,8 @@ CS 372, 400, Fall 2018
 Project 2: ftserver and ftclient
 
 # EXTRA CREDIT
-  - [X] Multithreaded server
-  - [X] Transfer files other than text files
-  - [ ] Allow client to change directory (?? specify for listing)
-  - [ ] Username/Password authentication
-    - [ ] Require username/password
-    - [ ] Allow anonymous users
+  - Multithreaded server
+  - Transfer files other than text files
 
 
 # ftserver
@@ -29,9 +25,6 @@ EXTRA CREDIT!
     transferred.
 
 
-
-
-
 # ftclient
 
 I wrote ftclient in python. To run it, simply run ftclient.py
@@ -40,4 +33,3 @@ flip-shell$ ./ftclient.py
 
 If you request a file, and it already exists locally, you will be
 prompted to override it (or not).
-
