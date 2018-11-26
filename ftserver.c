@@ -10,6 +10,7 @@
 #include <arpa/inet.h>
 #include <sys/wait.h>
 #include <signal.h>
+#include <openssl/sha.h>
 
 #include "constants.h"
 #include "ftserver_bind.h"
@@ -18,6 +19,8 @@
 
 int main(int argc, char **argv)
 {
+  unsigned char hash[SHA256_DIGEST_LENGTH];
+
   // Check that we have enough arguments for a port, and that we can bind to the port.
   if (argc < 2)
   {

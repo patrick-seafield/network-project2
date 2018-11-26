@@ -1,6 +1,6 @@
 
 ftserver: ftserver_bind.o ftserver_parse.o ftserver_respond.o constants.h
-	gcc -o ftserver ftserver.c ftserver_bind.o ftserver_parse.o ftserver_respond.o
+	gcc -o ftserver ftserver.c ftserver_bind.o ftserver_parse.o ftserver_respond.o -lssl -lcrypto
 
 ftserver_bind.o: ftserver_bind.h
 	gcc -c ftserver_bind.c
