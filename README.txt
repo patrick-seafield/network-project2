@@ -20,7 +20,7 @@ flip-shell$ make
 
 The ftserver executable will be created in the local directory.
 
-EXTRA CREDIT:
+EXTRA CREDIT!
 - ftserver can handle 8 incoming connections concurrently.
   It calls fork() to launch a child process and handle the connection.
 
@@ -29,4 +29,10 @@ EXTRA CREDIT:
 
 # ftclient
 
+I wrote ftclient in python. To run it, simply run ftclient.py
+
+flip-shell$ ./ftclient.py
+
+If you request a file, and it already exists locally, you will be
+prompted to override it (or not).
 
