@@ -18,8 +18,6 @@
 // the wishes of our client.
 struct command * parse_request_text(char * buffer)
 {
-  printf("Beginning parsing of client request.\n");
-
   struct command * cmd = malloc(sizeof(cmd));
   cmd->ctype = unknown;
   cmd->port = NULL;

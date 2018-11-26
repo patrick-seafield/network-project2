@@ -26,10 +26,8 @@ int list_directory(int acceptfd, struct command * cmd)
   struct sockaddr_storage client_addr;
   socklen_t addr_size = sizeof client_addr;
 
-  printf("Binding to data port %s.\n", cmd->port);
   data_socketfd = ftserver_bind(cmd->port);
 
-  printf("Listening on data_socketfd.\n");
   if (listen(data_socketfd, 1) == -1)
   {
     perror("list_directory: listen() failed");
@@ -40,7 +38,6 @@ int list_directory(int acceptfd, struct command * cmd)
   bytes_send = send(acceptfd, "OK-l", 5, 0);
 
   // Accept a connection we expect from the client on the separate data port.
-  printf("Calling accept() on data_socketfd.\n");
   data_acceptfd = accept(data_socketfd, (struct sockaddr *)&client_addr, &addr_size);
   if (data_acceptfd == -1)
   {
@@ -84,7 +81,7 @@ int send_file(int acceptfd, struct command * cmd)
   {
     printf("Problem with %s\n", cmd->requested_file);
     perror("Couldn't open requested file.");
-
+    
     return send(acceptfd, "FILE NOT FOUND", 15, 0);
   }
 
@@ -94,10 +91,8 @@ int send_file(int acceptfd, struct command * cmd)
   struct sockaddr_storage client_addr;
   socklen_t addr_size = sizeof client_addr;
 
-  printf("Binding to data port %s.\n", cmd->port);
   data_socketfd = ftserver_bind(cmd->port);
 
-  printf("Listening on data_socketfd.\n");
   if (listen(data_socketfd, 1) == -1)
   {
     perror("list_directory: listen() failed");
@@ -108,7 +103,6 @@ int send_file(int acceptfd, struct command * cmd)
   bytes_send = send(acceptfd, "OK-g", 5, 0);
 
   // Accept a connection we expect from the client on the separate data port.
-  printf("Calling accept() on data_socketfd.\n");
   data_acceptfd = accept(data_socketfd, (struct sockaddr *)&client_addr, &addr_size);
   if (data_acceptfd == -1)
   {
@@ -121,7 +115,7 @@ int send_file(int acceptfd, struct command * cmd)
   inet_ntop(client_addr.ss_family,
             &((struct sockaddr_in *)&client_addr)->sin_addr,
             s, sizeof s);
-   printf("Sending file contents to %s:%s.\n", s, cmd->port);
+        printf("Sending “%s” to %s:%s.\n", cmd->requested_file, s, cmd->port);
 
    // Send the file contents to the client.
    char * buffer = malloc(BUFFER_SIZE);

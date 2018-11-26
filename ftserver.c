@@ -82,20 +82,14 @@ int main(int argc, char **argv)
       memset(buffer, '\0', BUFFER_SIZE);
       int bytes_recv;
 
-      printf("calling recv\n");
       if ((bytes_recv = recv(acceptfd, buffer, BUFFER_SIZE - 1, 0)) == -1)
       {
         perror("recv() failed");
         exit(1);
-      } else {
-        // TESTING: Print what's received.
-        printf("RECEIVED REQUEST %d bytes long: %s\n", bytes_recv, buffer);
       }
 
+      // Parse the command sent by the client.
       struct command * cmd = parse_request_text(buffer);
-
-      // TESTING: print the command enum.
-      printf("Command is: %d\n", (int)cmd->ctype);
 
       if (cmd->ctype == list_dir)
       {
@@ -110,6 +104,8 @@ int main(int argc, char **argv)
       }
       else if (cmd->ctype == send_data)
       {
+        printf("File “%s” requested on port %s.\n", cmd->requested_file, cmd->port);
+        
         // Send the requested file to the client on the specified 
         if (send_file(acceptfd, cmd) == -1)
         {

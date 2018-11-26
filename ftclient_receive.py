@@ -33,9 +33,10 @@ def receiveFile(opts):
         s.connect((opts['serverHost'], opts['dataPort']))
         s.setsockopt(socket.SOL_SOCKET, socket.SO_SNDBUF, BUFFER_SIZE)
 
-        while True:
-            data = s.recv(1024)
-            if data is None or len(data) == 0:
-                break
-            else:
-                print(data.decode())
+        with open(opts['filename'], 'w') as f:
+            while True:
+                data = s.recv(1024)
+                if data is None or len(data) == 0:
+                    break
+                else:
+                    f.write(data.decode())

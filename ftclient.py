@@ -5,6 +5,7 @@
 
 import socket
 import sys
+import os
 import string
 
 from validateArgs import validate
@@ -18,6 +19,13 @@ if __name__ == '__main__':
     if (opts is None):
         sys.exit(1)
 
+    # Check if the file already exists locally.
+    if opts['command'] == '-g' and os.path.isfile(opts['filename']):
+        should_override = input("File already exists. Override? (y/N): ")
+        if should_override != 'y' and should_override != 'Y':
+            print("Exiting.")
+            sys.exit(1)
+        
     # Open the socket on the user-specified server.
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         s.connect((opts['serverHost'], opts['serverPort']))
@@ -26,13 +34,11 @@ if __name__ == '__main__':
         # Ask for a list of downloadable files.
         if opts['command'] == '-l':
             command = "-l {dataPort}".format(**opts).encode('ascii')
-            print("Sending command:", command)
             bytes_sent = s.send(command)
             
             data = s.recv(BUFFER_SIZE - 1).decode()
             if data is not None:
                 response = data[:-1] # Strip the \0 character.
-                print(response)
                 if response == 'OK-l':
                     receiveListDirectory(opts)
                 else:
@@ -42,13 +48,11 @@ if __name__ == '__main__':
 
         if opts['command'] == '-g':
             command = "-g {filename} {dataPort}".format(**opts).encode('ascii')
-            print("Sending command:", command)
             bytes_sent = s.send(command)
             
             data = s.recv(BUFFER_SIZE - 1).decode()
             if data is not None:
                 response = data[:-1] # Strip the \0 character.
-                print(response)
                 if response == 'OK-g':
                     receiveFile(opts)
                 else:
