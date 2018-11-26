@@ -64,6 +64,7 @@ int main(int argc, char **argv)
       exit(1);
     }
 
+    // EXTRA CREDIT: multithreading
     // Fork a child process to communicate with the client.
     if (!fork())
     {

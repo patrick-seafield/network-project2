@@ -77,7 +77,8 @@ int list_directory(int acceptfd, struct command * cmd)
 
 int send_file(int acceptfd, struct command * cmd)
 {
-  FILE * fp = fopen(cmd->requested_file, "r");
+  // EXTRA CREDIT: opens file as binary streams.
+  FILE * fp = fopen(cmd->requested_file, "rb");
   if (fp == NULL)
   {
     printf("Problem with %s\n", cmd->requested_file);
