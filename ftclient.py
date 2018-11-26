@@ -8,9 +8,7 @@ import sys
 import string
 
 from validateArgs import validate
-from ftclient_receive import receiveListDirectory, receiveFile
-
-BUFFER_SIZE = 1024
+from ftclient_receive import receiveListDirectory, receiveFile, BUFFER_SIZE
 
 
 # main()

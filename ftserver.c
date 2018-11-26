@@ -100,7 +100,6 @@ int main(int argc, char **argv)
       if (cmd->ctype == list_dir)
       {
         printf("List directory requested on port %s.\n", cmd->port);
-        printf("Sending directory contents to %s:%s.\n", s, cmd->port);
 
         // List the directory files for downloading.
         if (list_directory(acceptfd, cmd) == -1)
