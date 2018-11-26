@@ -4,7 +4,7 @@
 #include "ftserver_parse.h"
 
 int list_directory(int acceptfd, struct command * cmd);
-int send_file(int acceptfd);
+int send_file(int acceptfd, struct command * cmd);
 int respond_unsure(int acceptfd);
 
 #endif

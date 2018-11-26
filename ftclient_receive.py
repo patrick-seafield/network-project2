@@ -28,3 +28,14 @@ def receiveListDirectory(opts):
 
 def receiveFile(opts):
     print('Receiving “{filename}” from {serverHost}:{dataPort}'.format(**opts))
+
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        s.connect((opts['serverHost'], opts['dataPort']))
+        s.setsockopt(socket.SOL_SOCKET, socket.SO_SNDBUF, BUFFER_SIZE)
+
+        while True:
+            data = s.recv(1024)
+            if data is None or len(data) == 0:
+                break
+            else:
+                print(data.decode())

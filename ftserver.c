@@ -78,7 +78,7 @@ int main(int argc, char **argv)
       printf("Connection from %s.\n", s);
 
       // Receive a command from the client.
-      char * buffer = malloc(BUFFER_SIZE * sizeof(char));
+      char * buffer = malloc(BUFFER_SIZE);
       memset(buffer, '\0', BUFFER_SIZE);
       int bytes_recv;
 
@@ -111,7 +111,7 @@ int main(int argc, char **argv)
       else if (cmd->ctype == send_data)
       {
         // Send the requested file to the client on the specified 
-        if (send_file(acceptfd) == -1)
+        if (send_file(acceptfd, cmd) == -1)
         {
           perror("send_file() failed");
           exit(1);

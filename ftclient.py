@@ -36,5 +36,22 @@ if __name__ == '__main__':
                 if response == 'OK-l':
                     receiveListDirectory(opts)
                 else:
-                    print("Problem with server response to command. Exiting.")
+                    print("{serverHost}:{serverPort} says: {response}".format(
+                        response=response, **opts))
+                    sys.exit(1)
+
+        if opts['command'] == '-g':
+            command = "-g {filename} {dataPort}".format(**opts).encode('ascii')
+            print("Sending command:", command)
+            bytes_sent = s.send(command)
+            
+            data = s.recv(BUFFER_SIZE - 1).decode()
+            if data is not None:
+                response = data[:-1] # Strip the \0 character.
+                print(response)
+                if response == 'OK-g':
+                    receiveFile(opts)
+                else:
+                    print("{serverHost}:{serverPort} says: {response}".format(
+                        response=response, **opts))
                     sys.exit(1)
