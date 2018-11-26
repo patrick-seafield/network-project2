@@ -66,6 +66,7 @@ int list_directory(int acceptfd, struct command * cmd)
     if (ep->d_type == DT_REG)
     {
       send(data_acceptfd, ep->d_name, strlen(ep->d_name), 0);
+      send(data_acceptfd, "\n", 2, 0);
     }
   }
 
